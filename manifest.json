@@ -1,0 +1,58 @@
+{
+  "name": "Hello Extensions",
+  "description" : "Base Level Extension",
+  "version": "1.0",
+  "manifest_version": 2,
+
+  "browser_action": {
+    "default_popup": "hello.html",
+    "default_icon": {
+      "16": "images/dict-16.png",
+      "32": "images/dict-32.png",
+      "48": "images/dict-48.png",
+      "128": "images/dict-128.png"
+    },
+    "default_title": "Google Translate"
+  },
+
+  "content_scripts": [
+    {
+      "js": ["js/frame.js"],
+      "matches": ["*://*/*"]
+    }
+  ],
+
+  "web_accessible_resources": [
+    "*.html"
+  ],
+
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U",
+        "mac": "MacCtrl+Shift+F"
+      },
+      "description": "Opens hello.html"
+    }
+  },
+
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "http://*/*",
+    "https://*/*"
+  ],
+
+  "background": {
+    "persistent": false,
+    "scripts": ["js/background.js", "js/jquery-3.3.1.js"]
+  },
+
+  "icons": {
+    "16": "images/dict-16.png",
+    "32": "images/dict-32.png",
+    "48": "images/dict-48.png",
+    "128": "images/dict-128.png"
+  }
+
+}
