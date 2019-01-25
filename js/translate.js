@@ -5,7 +5,7 @@ function translate(text, callback) {
         timeout: 5000,
         dataType: "text",
         success: function (res) {
-            console.log('success ' + " input " + text + ", res " + res);
+            log('success ' + " input " + text + ", res " + res);
             callback(extractTranslation(res));
         },
         error: function (xhr, status, error) {
