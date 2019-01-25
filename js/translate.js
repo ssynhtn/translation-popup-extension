@@ -1,6 +1,6 @@
 function translate(text, callback) {
     $.ajax({
-        url: "http://translate.google.cn/translate_a/single?client=at&sl=en&tl=zh-CN&dt=t&q=" + encodeURIComponent(text),
+        url: "http://translate.google.com/translate_a/single?client=at&sl=en&tl=zh-CN&dt=t&q=" + encodeURIComponent(text),
         // url: "http://demo.com:8080/index/index/randomInt",
         timeout: 5000,
         dataType: "text",
@@ -31,8 +31,10 @@ function extractTranslation(jsonRes) {
 let button = document.getElementById('translate');
 let inputBox = document.getElementById('input');
 let outputBox = document.getElementById('output');
-button.onclick = function () {
-    translate(inputBox.value, function (result) {
-        outputBox.value = result;
-    });
-};
+if (button && inputBox && outputBox) {
+    button.onclick = function () {
+        translate(inputBox.value, function (result) {
+            outputBox.value = result;
+        });
+    };
+}

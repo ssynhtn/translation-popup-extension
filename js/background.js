@@ -12,7 +12,11 @@ chrome.contextMenus.onClicked.addListener(onClickHandler);
 function onClickHandler(info, tab) {
     // alert(info.selectionText);
     // test(info.selectionText);
-    translate(info.selectionText);
+    let text = info.selectionText;
+    translate(text, function (result) {
+       sendResult(text, result, tab);
+    });
+    // translate(info.selectionText, tab);
     // useJquery();
     // var sText = info.selectionText;
     // // var url = "http://dict.youdao.com/search?q=" + encodeURIComponent(sText);
@@ -20,36 +24,21 @@ function onClickHandler(info, tab) {
     // window.open(url, '_blank');
 }
 
-function translate(text) {
-    $.ajax({
-        url: "http://translate.google.cn/translate_a/single?client=at&sl=en&tl=zh-CN&dt=t&q=" + encodeURIComponent(text),
-        // url: "http://demo.com:8080/index/index/randomInt",
-        timeout: 5000,
-        dataType: "text",
-        success: function (res) {
-            var result = extractTranslation(res);
-            console.log("jquery ajax res " + result);
-            sendResult(text, result);
-        },
-        error: function (xhr, status, error) {
-            // console.log('error status ' + status);
-            console.log('error ' + error);
-            sendResult(text, error);
-            // console.log('error xhr status ' + xhr.status);
-        }
-    })
-}
-
-function sendResult(text, translation) {
+function sendResult(text, translation, tab) {
     console.log("about to find tab");
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        console.log("found tab and send translation " + translation);
-        chrome.tabs.sendMessage(tabs[0].id, {text: text, translation: translation}, function(response) {
-            // console.log(response.msg);
-            console.log("sending to tab id " + tabs[0].id + ", title " + tabs[0].title);
-            console.log("response is " + JSON.stringify(response));
-        });
+    chrome.tabs.sendMessage(tab.id, {text: text, translation: translation}, function(response) {
+        // console.log(response.msg);
+        console.log("sending to tab id " + tab.id + ", title " + tab.title);
+        console.log("response is " + JSON.stringify(response));
     });
+    // chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    //     console.log("found tab and send translation " + translation);
+    //     chrome.tabs.sendMessage(tabs[0].id, {text: text, translation: translation}, function(response) {
+    //         // console.log(response.msg);
+    //         console.log("sending to tab id " + tabs[0].id + ", title " + tabs[0].title);
+    //         console.log("response is " + JSON.stringify(response));
+    //     });
+    // });
 }
 
 function test(text) {
@@ -86,19 +75,6 @@ function test(text) {
     console.log("send state " + xhr.readyState);
 
 
-}
-
-function extractTranslation(jsonRes) {
-    var result = "";
-    var jsonArray = JSON.parse(jsonRes);
-    var list = jsonArray[0];
-    for (let i = 0; i < list.length; i++) {
-        var item = list[i];
-        var translation = item[0];
-        result += translation;
-    }
-
-    return result;
 }
 
 console.log('start time out ' + new Date().toLocaleString());

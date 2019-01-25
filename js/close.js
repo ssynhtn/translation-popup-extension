@@ -1,5 +1,3 @@
-console.log("doc " + document.documentElement.innerHTML);
-
 let closeButton = document.getElementById("close");
 let iframe = document.getElementById("just_we");
 console.log("just we is " + iframe);
